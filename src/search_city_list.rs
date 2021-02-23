@@ -92,6 +92,7 @@ pub async fn get_search_city_list(info: web::Query<Info>) -> Result<HttpResponse
         None => "".to_string(),
     };
     let key: &str = &pinyin;
+    
     // 再取出cities查找
     let f = File::open("static/cities.json").unwrap();
     let v: CityResult = serde_json::from_reader(f).unwrap();

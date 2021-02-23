@@ -56,8 +56,6 @@ async fn main() -> io::Result<()> {
         App::new()
             .wrap(
                 Cors::new()
-                    .allowed_origin("http://localhost:8000")
-                    .allowed_origin("http://10.180.8.10:8000")
                     .allowed_methods(vec!["GET", "POST"])
                     // .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT])
                     // .allowed_header(header::CONTENT_TYPE)
@@ -73,7 +71,7 @@ async fn main() -> io::Result<()> {
                 web::resource("").route(web::get().to(p404)),
             )
     })
-    .bind("127.0.0.1:8001")?
+    .bind("127.0.0.1:7000")?
     .run()
     .await
 }
