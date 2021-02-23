@@ -52,6 +52,8 @@ async fn main() -> io::Result<()> {
     env::set_var("RUST_LOG", "actix_web=debug,actix_server=info");
     env_logger::init();
 
+    println!("listening http://localhost:7000");
+
     HttpServer::new(|| {
         App::new()
             .wrap(
@@ -71,7 +73,8 @@ async fn main() -> io::Result<()> {
                 web::resource("").route(web::get().to(p404)),
             )
     })
-    .bind("127.0.0.1:7000")?
+    .bind("0.0.0.0:7000")?
     .run()
     .await
+
 }
