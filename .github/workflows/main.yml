@@ -1,0 +1,33 @@
+name: Build app and deploy
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Cargo build
+        run: cargo build --release && mkdir ./dist
+      - name: Prepare
+        run: cp -r ./target/release/actix-train-ticket ./dist/ && cp -r ./static ./dist/static
+      - name: Deploy
+        uses: easingthemes/ssh-deploy@v2.1.1
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          # scp参数
+          ARGS: "-avzr --delete"
+          SOURCE: "./dist"
+          REMOTE_HOST: "118.190.37.169"
+          # 用户
+          REMOTE_USER: "root"
+          TARGET: "/root/web/anthhub/deploy/actix-train-ticket"
+      - name: Setup
+        timeout-minutes: 10
+        uses: JimCronqvist/action-ssh@master
+        with:
+          hosts: "118.190.37.169"
+          privateKey: ${{ secrets.PRIVATE_KEY }}
+          command: cd /root/web/anthhub/deploy/actix-train-ticket/dist && nohup ./actix-train-ticket &
