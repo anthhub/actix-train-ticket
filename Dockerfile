@@ -15,7 +15,6 @@ ENV OPENSSL_INCLUDE_DIR="/usr/include/openssl"
 ENV RUSTFLAGS="-C target-feature=+crt-static"
 RUN cargo install --target x86_64-unknown-linux-musl --path .
 
-# FROM debian
 FROM alpine:3.13
 COPY --from=builder /usr/local/cargo/bin/actix-train-ticket .
 COPY static ./static

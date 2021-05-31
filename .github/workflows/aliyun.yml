@@ -34,6 +34,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
+      - name: Cache Dependences
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+  
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v1
         with: 
