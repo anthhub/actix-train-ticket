@@ -1,16 +1,16 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: "{{ .Values.service.app }}"-route
+  name: {{ .Values.service.app }}-route
 spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`"{{ .Values.service.app }}"`)
+    - match: Host(`{{ .Values.route.host }}`)
       kind: Rule
       services:
-        - name: "{{ .Values.service.app }}"
-          port: "{{ .Values.service.port }}"
+        - name: {{ .Values.service.app }}
+          port: {{ .Values.service.port }}
 
 # 自签名
 # openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=who.liuma.top"
@@ -18,15 +18,15 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: "{{ .Values.service.app }}"-route-secure
+  name: {{ .Values.service.app }}-route-secure
 spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`"{{ .Values.service.app }}"`)
+    - match: Host(`{{ .Values.route.host }}`)
       kind: Rule
       services:
-        - name: "{{ .Values.service.app }}"
-          port: "{{ .Values.service.port }}"
+        - name: {{ .Values.service.app }}
+          port: {{ .Values.service.port }}
   tls:
     secretName: who-tls

@@ -10,7 +10,7 @@ env:
   NAMESPACE: namespace
   TAG: 0.0.${{ github.run_number }}
   REPO: https://anthhub.github.io/actix-train-ticket
-  REQ: $(curl -s https://anthhub.github.io/actix-train-ticket/latest?q=$RANDOM)
+  REQ: $(curl -s https://anthhub.github.io/actix-train-ticket/latest?q=$RANDOM) 
   APP: actix-train-ticket
   HOST: "118.190.37.169"
   DOMAIN: anthhub/actix-train-ticket
@@ -66,6 +66,11 @@ jobs:
           hosts: ${{ env.HOST }}
           privateKey: ${{ secrets.PRIVATE_KEY }}
           command: |
+            function error_exit {
+              echo "$1" 1>&2
+              exit 1
+            }
+
             until [ ${{ env.REQ }} = ${{ env.TAG }} ]
             do
               sleep 1
@@ -74,15 +79,15 @@ jobs:
             done
             echo "pass"
 
-            helm repo add ${{ env.APP }} ${{ env.REPO }}
-            helm repo update
-            helm search repo ${{ env.APP }} 
+            helm repo add ${{ env.APP }} ${{ env.REPO }} || error_exit "$LINENO failed: helm repo add ${{ env.APP }} "
+            helm repo update || error_exit "$LINENO failed: helm repo update"
+            helm search repo ${{ env.APP }} || error_exit "$LINENO failed: helm search repo ${{ env.APP }}"
             if helm status ${{ env.APP }} 
             then
-              helm upgrade ${{ env.APP }} ${{ env.APP }}/mychart --version=${{ env.TAG }} --set image.tag=${{ env.TAG }}
+              helm upgrade ${{ env.APP }} ${{ env.APP }}/mychart --version=${{ env.TAG }} --set image.tag=${{ env.TAG }} || error_exit "$LINENO failed: helm upgrade ${{ env.APP }} ${{ env.APP }}/mychart"
             else
-              helm install ${{ env.APP }} ${{ env.APP }}/mychart --version=${{ env.TAG }} --set image.tag=${{ env.TAG }}
-            fi
+              helm install ${{ env.APP }} ${{ env.APP }}/mychart --version=${{ env.TAG }} --set image.tag=${{ env.TAG }} || error_exit "$LINENO failed: helm install ${{ env.APP }} ${{ env.APP }}/mychart"
+            fi 
 
             helm ls
 

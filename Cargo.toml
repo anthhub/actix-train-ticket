@@ -21,3 +21,11 @@ serde = { version = "1.0.80", features = ["derive"] }
 serde_derive = "^1.0.59"
 pinyin = "0.7"
 regex = "1"
+
+
+[source.crates-io]
+registry = "https://github.com/rust-lang/crates.io-index"
+replace-with = 'ustc'
+
+[source.ustc]
+registry = "https://mirrors.ustc.edu.cn/crates.io-index"
