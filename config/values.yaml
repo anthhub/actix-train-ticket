@@ -9,7 +9,7 @@ image:
   # pullPolicy: IfNotPresent
 
 pod: 
-  replicas: 2
+  replicas: 1
 
 service:
   # type: NodePort
@@ -22,7 +22,7 @@ route:
 
 resources: 
   requests:
-    cpu: "0.2"
+    cpu: "0.5"
     memory: "16Mi"
   limits:
     memory: "32Mi"
